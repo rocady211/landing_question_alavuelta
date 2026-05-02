@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A la Vuelta — Profesionales de confianza, en tu barrio</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #F7F7FB;
+      color: #0F0F0F;
+      overflow-x: hidden;
+    }
+
+    .font-syne {
+      font-family: 'Syne', sans-serif;
+    }
+
+    /* ── Variables ── */
+    :root {
+      --purple: #8972FD;
+      --purple-light: #AFA0FF;
+      --purple-lighter: #EFEAFF;
+      --purple-dark: #6E57D8;
+      --dark: #0F0F0F;
+      --bg: #F7F7FB;
+      --surface: #FFFFFF;
+      --border: #E4E5F1;
+      --muted: #8F8F8F;
+      --gray-light: #B5B5B5;
+      --gray-dark: #5A5A5A;
+      --secondary: #D6D0FC;
+      --success: #2EB67D;
+      --error: #F04438;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(247, 247, 251, 0.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      object-fit: contain;
+    }
+
+    .nav-logo span {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--dark);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      background: var(--purple);
+      color: white;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 13px 28px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .btn-primary:hover {
+      background: var(--purple-dark);
+      transform: scale(1.02);
+      box-shadow: 0 8px 24px rgba(137, 114, 253, .3);
+    }
+
+    .btn-primary:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--dark);
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 13px 28px;
+      border-radius: 100px;
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--purple);
+      background: var(--purple-lighter);
+    }
+
+    /* ── Pill badge ── */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--purple-lighter);
+      border: 1px solid var(--secondary);
+      color: var(--purple-dark);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 5px 13px;
+      border-radius: 100px;
+    }
+
+    /* ── Section tag ── */
+    .section-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--purple);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 80px 24px 60px;
+    }
+
+    .hero-blob-1 {
+      position: absolute;
+      top: -140px;
+      right: -100px;
+      width: 560px;
+      height: 560px;
+      background: radial-gradient(circle, #EFEAFF 0%, transparent 68%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-blob-2 {
+      position: absolute;
+      bottom: -80px;
+      left: -120px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, #E7E4FF 0%, transparent 68%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Map pins ── */
+    .map-pin {
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-7px)
+      }
+    }
+
+    .map-pin:nth-child(2) {
+      animation-delay: .4s
+    }
+
+    .map-pin:nth-child(3) {
+      animation-delay: .8s
+    }
+
+    /* ── Card hover ── */
+    .card-hover {
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 48px rgba(137, 114, 253, .12);
+    }
+
+    /* ── Urgency dot ── */
+    .urgency-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--purple);
+      animation: pulse-ring 1.6s ease-in-out infinite;
+    }
+
+    @keyframes pulse-ring {
+      0% {
+        box-shadow: 0 0 0 0 rgba(137, 114, 253, .55)
+      }
+
+      70% {
+        box-shadow: 0 0 0 9px rgba(137, 114, 253, 0)
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(137, 114, 253, 0)
+      }
+    }
+
+    /* ── Carousel ── */
+    .carousel-section {
+      padding: 88px 0;
+      background: white;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .carousel-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .carousel-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .carousel-viewport {
+      flex: 1;
+      position: relative;
+      height: 600px;
+      overflow: hidden;
+    }
+
+    .carousel-slide {
+      position: absolute;
+      width: 240px;
+      transition: all .5s cubic-bezier(.25, .46, .45, .94);
+    }
+
+    .carousel-slide.pos-center {
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%) scale(1);
+      filter: blur(0);
+      opacity: 1;
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    .carousel-slide.pos-left {
+      left: 50%;
+      top: 50%;
+      transform: translate(calc(-50% - 172px), -50%) scale(.8);
+      filter: blur(4px);
+      opacity: .4;
+      z-index: 5;
+    }
+
+    .carousel-slide.pos-right {
+      left: 50%;
+      top: 50%;
+      transform: translate(calc(-50% + 172px), -50%) scale(.8);
+      filter: blur(4px);
+      opacity: .4;
+      z-index: 5;
+    }
+
+    .carousel-slide.pos-hidden {
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(.6);
+      filter: blur(8px);
+      opacity: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .phone-frame {
+      background: white;
+      border-radius: 32px;
+      border: 2px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(15, 15, 15, .08);
+      transition: box-shadow .5s ease, border-color .5s ease;
+    }
+
+    .carousel-slide.pos-center .phone-frame {
+      box-shadow: 0 24px 64px rgba(137, 114, 253, .22), 0 4px 16px rgba(15, 15, 15, .1);
+      border-color: var(--secondary);
+    }
+
+    .phone-status {
+      height: 32px;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+    }
+
+    .phone-img {
+      width: 100%;
+      display: block;
+    }
+
+    .slide-desc {
+      padding: 18px 0 0;
+      text-align: center;
+      transition: opacity .4s ease .1s;
+    }
+
+    .carousel-slide:not(.pos-center) .slide-desc {
+      opacity: 0;
+    }
+
+    .carousel-slide.pos-center .slide-desc {
+      opacity: 1;
+    }
+
+    .carousel-dots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 28px;
+    }
+
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #D9DBE9;
+      cursor: pointer;
+      transition: all .3s;
+      border: none;
+      padding: 0;
+    }
+
+    .carousel-dot.active {
+      background: var(--purple);
+      width: 28px;
+      border-radius: 5px;
+    }
+
+    .carousel-btn {
+      width: 46px;
+      height: 46px;
+      min-width: 46px;
+      border-radius: 50%;
+      background: white;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all .2s;
+      flex-shrink: 0;
+    }
+
+    .carousel-btn:hover {
+      border-color: var(--purple);
+      background: var(--purple-lighter);
+    }
+
+    /* ── Survey ── */
+    .survey-option {
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: all .2s;
+      background: white;
+      user-select: none;
+    }
+
+    .survey-option:hover {
+      border-color: var(--purple);
+      background: #FAFAFE;
+    }
+
+    .survey-option.selected {
+      border-color: var(--purple);
+      background: var(--purple-lighter);
+    }
+
+    .survey-option.selected .option-check {
+      background: var(--purple);
+      border-color: var(--purple);
+    }
+
+    .option-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s;
+    }
+
+    .option-check svg {
+      display: none;
+    }
+
+    .survey-option.selected .option-check svg {
+      display: block;
+    }
+
+    /* Step indicator */
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+
+    .step-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .step-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      transition: all .35s;
+    }
+
+    .step-circle.active {
+      background: var(--purple);
+      color: white;
+      box-shadow: 0 4px 16px rgba(137, 114, 253, .4);
+    }
+
+    .step-circle.done {
+      background: var(--purple-lighter);
+      color: var(--purple-dark);
+      border: 2px solid var(--secondary);
+    }
+
+    .step-circle.inactive {
+      background: white;
+      color: var(--gray-light);
+      border: 2px solid var(--border);
+    }
+
+    .step-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      white-space: nowrap;
+    }
+
+    .step-label.active {
+      color: var(--purple);
+    }
+
+    .step-label.done {
+      color: var(--purple-dark);
+    }
+
+    .step-label.inactive {
+      color: var(--gray-light);
+    }
+
+    .step-connector {
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+      margin-bottom: 20px;
+      transition: background .35s;
+    }
+
+    .step-connector.done {
+      background: var(--secondary);
+    }
+
+    /* Inputs */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .field-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-dark);
+      margin-bottom: 4px;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      background: white;
+      color: var(--dark);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    input:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(137, 114, 253, .12);
+    }
+
+    input::placeholder {
+      color: var(--gray-light);
+    }
+
+    /* Survey step transitions */
+    .survey-step {
+      display: none;
+      animation: fadeStepIn .35s ease;
+    }
+
+    .survey-step.active {
+      display: block;
+    }
+
+    @keyframes fadeStepIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Spinner */
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, .3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Payment yes/no big buttons */
+    .pay-option {
+      flex: 1;
+      padding: 20px 16px;
+      border-radius: 16px;
+      border: 2px solid var(--border);
+      background: white;
+      cursor: pointer;
+      transition: all .2s;
+      text-align: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .pay-option:hover {
+      border-color: var(--purple);
+    }
+
+    .pay-option.selected-yes {
+      border-color: var(--success);
+      background: #F0FBF6;
+      color: var(--success);
+    }
+
+    .pay-option.selected-no {
+      border-color: var(--error);
+      background: #FEF2F2;
+      color: var(--error);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .hero-phone-wrap {
+        display: flex;
+        justify-content: center;
+      }
+
+      .nav-logo-text {
+        display: none;
+      }
+
+      h1 {
+        font-size: 36px !important;
+      }
+
+      .hero {
+        padding: 60px 20px 48px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════
+     NAVIGATION
+══════════════════════════════════ -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <img src="imagenes/logo1024.png" alt="A la Vuelta" />
+        <span class="nav-logo-text font-syne">ALaVuelta</span>
+      </a>
+      <div class="nav-actions">
+        <a href="#referencias" class="btn-secondary" style="padding:10px 18px;font-size:13px;">Ver la app</a>
+        <a href="#survey" class="btn-primary" style="padding:10px 22px;font-size:14px;">Quiero participar</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════
+     HERO
+══════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero-blob-1"></div>
+    <div class="hero-blob-2"></div>
+
+    <div class="hero-grid">
+
+      <!-- Copy -->
+      <div>
+        <div class="pill" style="margin-bottom:22px;">
+          <svg width="8" height="8" viewBox="0 0 8 8">
+            <circle cx="4" cy="4" r="4" fill="#8972FD" />
+          </svg>
+          En desarrollo
+        </div>
+        <h1 class="font-syne"
+          style="font-size:clamp(36px,5vw,58px);font-weight:800;line-height:1.08;color:#0F0F0F;margin-bottom:22px;letter-spacing:-0.02em;">
+          El profesional<br>que necesitás,<br><span style="color:#8972FD;">a la vuelta.</span>
+        </h1>
+        <p style="font-size:17px;color:#5A5A5A;line-height:1.75;margin-bottom:34px;max-width:460px;">
+          Conectamos vecinos con plomeros, electricistas, carpinteros y más servicios del hogar — en tiempo real, dentro
+          de tu zona. Participá en la validación y ayudanos a construirlo.
+        </p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="#survey" class="btn-primary">
+            Quiero participar
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </a>
+          <a href="#como-funciona" class="btn-secondary">Ver cómo funciona</a>
+        </div>
+        <p style="font-size:13px;color:#8F8F8F;margin-top:18px;line-height:1.6;">Tu opinión es lo que nos acerca al
+          lanzamiento. Formá parte desde el primer día.</p>
+      </div>
+
+      <!-- Phone with home.png -->
+      <div class="hero-phone-wrap" style="display:flex;justify-content:center;">
+        <div
+          style="width:268px;background:white;border-radius:34px;box-shadow:0 32px 80px rgba(15,15,15,.13),0 4px 16px rgba(15,15,15,.06);overflow:hidden;border:1px solid #E4E5F1;">
+          <div
+            style="background:#0F0F0F;height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;">
+            <span style="font-size:10px;color:white;font-weight:600;letter-spacing:.02em;">9:41</span>
+            <div style="display:flex;gap:5px;align-items:center;">
+              <svg width="14" height="10" viewBox="0 0 14 10" fill="white" opacity="0.9">
+                <rect x="0" y="4" width="2.5" height="6" rx="1" />
+                <rect x="3.5" y="2.5" width="2.5" height="7.5" rx="1" />
+                <rect x="7" y="1" width="2.5" height="9" rx="1" />
+                <rect x="10.5" y="0" width="2.5" height="10" rx="1" />
+              </svg>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="white" opacity="0.9">
+                <path
+                  d="M6 2a4 4 0 0 1 4 4H8a2 2 0 0 0-2-2V2zM2.34 3.76A5.97 5.97 0 0 1 6 2v2a3.97 3.97 0 0 0-2.44 1.18L2.34 3.76z" />
+                <circle cx="6" cy="6" r="1.5" />
+              </svg>
+            </div>
+          </div>
+          <img src="imagenes/main.png" alt="Pantalla de inicio — A la Vuelta"
+            style="width:100%;display:block;aspect-ratio:9/16;object-fit:cover;" />
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+     CAROUSEL / REFERENCES
+══════════════════════════════════ -->
+  <section id="referencias" class="carousel-section">
+    <div class="carousel-container">
+      <div style="text-align:center;margin-bottom:40px;">
+        <div class="section-tag" style="margin-bottom:10px;">Recorrido por la plataforma</div>
+        <h2 class="font-syne"
+          style="font-size:34px;font-weight:800;color:#0F0F0F;margin-bottom:10px;letter-spacing:-.02em;">Así se ve A la
+          Vuelta</h2>
+        <p style="font-size:15px;color:#5A5A5A;max-width:460px;margin:0 auto;line-height:1.7;">Explorá las pantallas
+          principales del prototipo y entendé cómo fluye la experiencia.</p>
+      </div>
+
+      <div class="carousel-wrapper">
+        <button class="carousel-btn" id="prevBtn" onclick="moveCarousel(-1)" aria-label="Anterior">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M11 4L6 9l5 5" stroke="#0F0F0F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+
+        <div class="carousel-viewport" id="carouselViewport">
+          <!-- Slide 1 -->
+          <div class="carousel-slide">
+            <div class="phone-frame">
+              <div class="phone-status">
+                <span style="font-size:10px;color:white;font-weight:600;">9:41</span>
+                <div style="display:flex;gap:4px;align-items:center;">
+                  <svg width="13" height="10" viewBox="0 0 14 10" fill="white" opacity="0.9">
+                    <rect x="0" y="4" width="2.5" height="6" rx="1" />
+                    <rect x="3.5" y="2.5" width="2.5" height="7.5" rx="1" />
+                    <rect x="7" y="1" width="2.5" height="9" rx="1" />
+                    <rect x="10.5" y="0" width="2.5" height="10" rx="1" />
+                  </svg>
+                </div>
+              </div>
+              <img src="imagenes/main.png" alt="Mapa interactivo" class="phone-img"
+                style="aspect-ratio:9/16;object-fit:cover;" />
+            </div>
+            <div class="slide-desc">
+              <div class="font-syne" style="font-weight:700;font-size:15px;color:#0F0F0F;margin-bottom:5px;">Mapa en
+                tiempo real</div>
+              <p style="font-size:13px;color:#5A5A5A;line-height:1.6;max-width:220px;margin:0 auto;">Visualizá de un
+                vistazo todos los profesionales disponibles en tu zona, con perfil, servicios activos y calificaciones.
+              </p>
+            </div>
+          </div>
+          <!-- Slide 2 -->
+          <div class="carousel-slide">
+            <div class="phone-frame">
+              <div class="phone-status">
+                <span style="font-size:10px;color:white;font-weight:600;">9:41</span>
+                <div style="display:flex;gap:4px;align-items:center;">
+                  <svg width="13" height="10" viewBox="0 0 14 10" fill="white" opacity="0.9">
+                    <rect x="0" y="4" width="2.5" height="6" rx="1" />
+                    <rect x="3.5" y="2.5" width="2.5" height="7.5" rx="1" />
+                    <rect x="7" y="1" width="2.5" height="9" rx="1" />
+                    <rect x="10.5" y="0" width="2.5" height="10" rx="1" />
+                  </svg>
+                </div>
+              </div>
+              <img src="imagenes/search.png" alt="Búsqueda y filtros" class="phone-img"
+                style="aspect-ratio:9/16;object-fit:cover;" />
+            </div>
+            <div class="slide-desc">
+              <div class="font-syne" style="font-weight:700;font-size:15px;color:#0F0F0F;margin-bottom:5px;">Búsqueda
+                avanzada</div>
+              <p style="font-size:13px;color:#5A5A5A;line-height:1.6;max-width:220px;margin:0 auto;">Encontrá el
+                profesional ideal filtrando por rubro, precio, distancia o calificación. Resultados precisos, sin
+                intermediarios.</p>
+            </div>
+          </div>
+          <!-- Slide 3 -->
+          <div class="carousel-slide">
+            <div class="phone-frame">
+              <div class="phone-status">
+                <span style="font-size:10px;color:white;font-weight:600;">9:41</span>
+                <div style="display:flex;gap:4px;align-items:center;">
+                  <svg width="13" height="10" viewBox="0 0 14 10" fill="white" opacity="0.9">
+                    <rect x="0" y="4" width="2.5" height="6" rx="1" />
+                    <rect x="3.5" y="2.5" width="2.5" height="7.5" rx="1" />
+                    <rect x="7" y="1" width="2.5" height="9" rx="1" />
+                    <rect x="10.5" y="0" width="2.5" height="10" rx="1" />
+                  </svg>
+                </div>
+              </div>
+              <img src="imagenes/profile.png" alt="Perfil profesional" class="phone-img"
+                style="aspect-ratio:9/16;object-fit:cover;" />
+            </div>
+            <div class="slide-desc">
+              <div class="font-syne" style="font-weight:700;font-size:15px;color:#0F0F0F;margin-bottom:5px;">Perfil y
+                reserva directa</div>
+              <p style="font-size:13px;color:#5A5A5A;line-height:1.6;max-width:220px;margin:0 auto;">Revisá el portfolio
+                de cada profesional, su disponibilidad horaria y reservá el turno que mejor te convenga, todo en un solo
+                paso.</p>
+            </div>
+          </div>
+          <!-- Slide 4 -->
+          <div class="carousel-slide">
+            <div class="phone-frame">
+              <div class="phone-status">
+                <span style="font-size:10px;color:white;font-weight:600;">9:41</span>
+                <div style="display:flex;gap:4px;align-items:center;">
+                  <svg width="13" height="10" viewBox="0 0 14 10" fill="white" opacity="0.9">
+                    <rect x="0" y="4" width="2.5" height="6" rx="1" />
+                    <rect x="3.5" y="2.5" width="2.5" height="7.5" rx="1" />
+                    <rect x="7" y="1" width="2.5" height="9" rx="1" />
+                    <rect x="10.5" y="0" width="2.5" height="10" rx="1" />
+                  </svg>
+                </div>
+              </div>
+              <img src="imagenes/chat.png" alt="Chat integrado" class="phone-img"
+                style="aspect-ratio:9/16;object-fit:cover;" />
+            </div>
+            <div class="slide-desc">
+              <div class="font-syne" style="font-weight:700;font-size:15px;color:#0F0F0F;margin-bottom:5px;">Mensajería
+                integrada</div>
+              <p style="font-size:13px;color:#5A5A5A;line-height:1.6;max-width:220px;margin:0 auto;">Coordiná los
+                detalles directamente con el profesional o cliente. Los estados de cada reserva se actualizan en tiempo
+                real.</p>
+            </div>
+          </div>
+          <!-- Slide 5 -->
+          <div class="carousel-slide">
+            <div class="phone-frame">
+              <div class="phone-status">
+                <span style="font-size:10px;color:white;font-weight:600;">9:41</span>
+                <div style="display:flex;gap:4px;align-items:center;">
+                  <svg width="13" height="10" viewBox="0 0 14 10" fill="white" opacity="0.9">
+                    <rect x="0" y="4" width="2.5" height="6" rx="1" />
+                    <rect x="3.5" y="2.5" width="2.5" height="7.5" rx="1" />
+                    <rect x="7" y="1" width="2.5" height="9" rx="1" />
+                    <rect x="10.5" y="0" width="2.5" height="10" rx="1" />
+                  </svg>
+                </div>
+              </div>
+              <img src="imagenes/calendario.png" alt="Gestión de agenda" class="phone-img"
+                style="aspect-ratio:9/16;object-fit:cover;" />
+            </div>
+            <div class="slide-desc">
+              <div class="font-syne" style="font-weight:700;font-size:15px;color:#0F0F0F;margin-bottom:5px;">Panel de
+                agenda profesional</div>
+              <p style="font-size:13px;color:#5A5A5A;line-height:1.6;max-width:220px;margin:0 auto;">Gestioná tus turnos
+                por fecha, aceptá o rechazá solicitudes y mantenés el control total de tu disponibilidad diaria.</p>
+            </div>
+          </div>
+        </div>
+
+        <button class="carousel-btn" id="nextBtn" onclick="moveCarousel(1)" aria-label="Siguiente">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M7 4l5 5-5 5" stroke="#0F0F0F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+      <div class="carousel-dots" id="carouselDots"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+     HOW IT WORKS
+══════════════════════════════════ -->
+  <section id="como-funciona" style="padding:88px 24px;background:#F7F7FB;border-top:1px solid #E4E5F1;">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:56px;">
+        <div class="section-tag" style="margin-bottom:10px;">Flujo de la plataforma</div>
+        <h2 class="font-syne"
+          style="font-size:36px;font-weight:800;color:#0F0F0F;margin-bottom:12px;letter-spacing:-.02em;">Cómo funciona A
+          la Vuelta</h2>
+        <p style="font-size:16px;color:#5A5A5A;max-width:520px;margin:0 auto;line-height:1.75;">Dos perfiles dentro de
+          la misma plataforma. Independientemente de si buscás un servicio o lo ofrecés, el flujo es simple, rápido y
+          sin fricción.</p>
+      </div>
+
+      <div style="display:flex;justify-content:center;gap:8px;margin-bottom:40px;">
+        <button onclick="showTab('user')" id="tab-user" class="btn-primary"
+          style="padding:10px 24px;font-size:14px;">Soy usuario</button>
+        <button onclick="showTab('pro')" id="tab-pro" class="btn-secondary"
+          style="padding:10px 24px;font-size:14px;">Soy profesional</button>
+      </div>
+
+      <!-- User flow -->
+      <div id="tab-user-content">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;">
+          <div class="card-hover" style="background:white;border:1px solid #E4E5F1;border-radius:20px;padding:26px;">
+            <div
+              style="width:42px;height:42px;background:#8972FD;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="white" stroke-width="2" />
+                <circle cx="12" cy="10" r="3" stroke="white" stroke-width="2" />
+              </svg>
+            </div>
+            <div class="font-syne"
+              style="font-weight:700;font-size:12px;color:#8F8F8F;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;">
+              01 — Explorá el mapa</div>
+            <p style="font-size:14px;color:#5A5A5A;line-height:1.65;">Abrí la aplicación y visualizá al instante todos
+              los profesionales habilitados en tu zona, con perfil completo, reseñas verificadas y disponibilidad en
+              tiempo real.</p>
+          </div>
+          <div class="card-hover" style="background:white;border:1px solid #E4E5F1;border-radius:20px;padding:26px;">
+            <div
+              style="width:42px;height:42px;background:#8972FD;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" />
+                <path d="M8 12l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div class="font-syne"
+              style="font-weight:700;font-size:12px;color:#8F8F8F;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;">
+              02 — Elegí y reservá</div>
+            <p style="font-size:14px;color:#5A5A5A;line-height:1.65;">Compara perfiles, consultá precios estimados y
+              reservá directamente desde la app o coordina via chat antes de confirmar. Sin llamadas ni intermediarios.
+            </p>
+          </div>
+          <div class="card-hover" style="background:white;border:1px solid #E4E5F1;border-radius:20px;padding:26px;">
+            <div
+              style="width:42px;height:42px;background:#8972FD;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="white" stroke-width="2" />
+                <path d="M9 22V12h6v10" stroke="white" stroke-width="2" />
+              </svg>
+            </div>
+            <div class="font-syne"
+              style="font-weight:700;font-size:12px;color:#8F8F8F;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;">
+              03 — El profesional llega</div>
+            <p style="font-size:14px;color:#5A5A5A;line-height:1.65;">Seguí el estado de tu reserva en tiempo real. El
+              profesional confirmado se presenta en tu domicilio en el horario pactado. Al finalizar, calificá el
+              servicio.</p>
+          </div>
+          <div class="card-hover"
+            style="background:#EFEAFF;border:1.5px solid #D6D0FC;border-radius:20px;padding:26px;">
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:18px;">
+              <div
+                style="width:42px;height:42px;background:#8972FD;border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                    stroke="white" stroke-width="2" />
+                  <path d="M12 9v4M12 17h.01" stroke="white" stroke-width="2" stroke-linecap="round" />
+                </svg>
+              </div>
+              <div class="urgency-dot"></div>
+            </div>
+            <div class="font-syne"
+              style="font-weight:700;font-size:12px;color:#6E57D8;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;">
+              Modo Urgencia</div>
+            <p style="font-size:14px;color:#5A5A5A;line-height:1.65;">Ante una emergencia del hogar, activá el modo
+              urgencia y enviá una alerta instantánea a todos los profesionales disponibles en tu radio. Respuesta
+              inmediata garantizada.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pro flow -->
+      <div id="tab-pro-content" style="display:none;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;">
+          <div class="card-hover" style="background:white;border:1px solid #E4E5F1;border-radius:20px;padding:26px;">
+            <div
+              style="width:42px;height:42px;background:#8972FD;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="white" stroke-width="2" />
+                <circle cx="12" cy="7" r="4" stroke="white" stroke-width="2" />
+              </svg>
+            </div>
+            <div class="font-syne"
+              style="font-weight:700;font-size:12px;color:#8F8F8F;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;">
+              01 — Creá tu perfil</div>
+            <p style="font-size:14px;color:#5A5A5A;line-height:1.65;">Registrate en minutos: definí tu rubro, zona de
+              cobertura, horarios de atención y los servicios que ofrecés. Tu perfil público queda activo de inmediato.
+            </p>
+          </div>
+          <div class="card-hover" style="background:white;border:1px solid #E4E5F1;border-radius:20px;padding:26px;">
+            <div
+              style="width:42px;height:42px;background:#8972FD;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="white" stroke-width="2" />
+                <circle cx="12" cy="10" r="3" stroke="white" stroke-width="2" />
+              </svg>
+            </div>
+            <div class="font-syne"
+              style="font-weight:700;font-size:12px;color:#8F8F8F;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;">
+              02 — Aparecés en el mapa</div>
+            <p style="font-size:14px;color:#5A5A5A;line-height:1.65;">Tu perfil se muestra automáticamente a vecinos que
+              buscan tu servicio en tiempo real. Una vitrina digital siempre activa, sin costo de publicidad.</p>
+          </div>
+          <div class="card-hover" style="background:white;border:1px solid #E4E5F1;border-radius:20px;padding:26px;">
+            <div
+              style="width:42px;height:42px;background:#8972FD;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="white" stroke-width="2" />
+                <path d="M16 2v4M8 2v4M3 10h18" stroke="white" stroke-width="2" />
+              </svg>
+            </div>
+            <div class="font-syne"
+              style="font-weight:700;font-size:12px;color:#8F8F8F;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;">
+              03 — Gestionás todo</div>
+            <p style="font-size:14px;color:#5A5A5A;line-height:1.65;">Recibís solicitudes de reserva, te comunicás con
+              tus clientes y organizás tu agenda semanal desde un único panel. Control total de tu negocio, en tu
+              celular.</p>
+          </div>
+          <div class="card-hover"
+            style="background:#EFEAFF;border:1.5px solid #D6D0FC;border-radius:20px;padding:26px;">
+            <div
+              style="width:42px;height:42px;background:#8972FD;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="white" stroke-width="2" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="white" stroke-width="2" />
+              </svg>
+            </div>
+            <div class="font-syne"
+              style="font-weight:700;font-size:12px;color:#6E57D8;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;">
+              Alertas de urgencia</div>
+            <p style="font-size:14px;color:#5A5A5A;line-height:1.65;">Cuando un vecino activa el modo urgencia para un
+              servicio que vos ofrecés, recibís una notificación inmediata. Más oportunidades de trabajo, sin esfuerzo
+              adicional.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+     FOR WHOM
+══════════════════════════════════ -->
+  <section style="padding:88px 24px;background:white;border-top:1px solid #E4E5F1;">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:52px;">
+        <div class="section-tag" style="margin-bottom:10px;">Audiencia objetivo</div>
+        <h2 class="font-syne"
+          style="font-size:36px;font-weight:800;color:#0F0F0F;margin-bottom:12px;letter-spacing:-.02em;">Tres perfiles,
+          una comunidad</h2>
+        <p style="font-size:16px;color:#5A5A5A;max-width:500px;margin:0 auto;line-height:1.75;">Cada actor del
+          ecosistema local tiene su propio rol dentro de la plataforma, conectados en un mismo lugar.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
+        <!-- Usuario -->
+        <div class="card-hover"
+          style="background:#F7F7FB;border:1px solid #E4E5F1;border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:18px;">
+          <div
+            style="width:52px;height:52px;background:#EFEAFF;border-radius:16px;display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="#8972FD" stroke-width="2" />
+              <path d="M9 22V12h6v10" stroke="#8972FD" stroke-width="2" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-syne" style="font-size:20px;font-weight:800;color:#0F0F0F;margin-bottom:9px;">Vecino /
+              Usuario</h3>
+            <p style="font-size:15px;color:#5A5A5A;line-height:1.75;margin-bottom:18px;">¿Necesitás un profesional de
+              confianza y no sabés a quién llamar? Encontrá la persona indicada en tu zona sin depender de grupos de
+              WhatsApp ni recomendaciones inciertas.</p>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+              <li style="display:flex;align-items:center;gap:9px;font-size:14px;color:#5A5A5A;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" fill="#EFEAFF" stroke="#8972FD" stroke-width="1.2" />
+                  <path d="M5 8l2 2 4-4" stroke="#8972FD" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                Visualizá quién trabaja en tu barrio
+              </li>
+              <li style="display:flex;align-items:center;gap:9px;font-size:14px;color:#5A5A5A;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" fill="#EFEAFF" stroke="#8972FD" stroke-width="1.2" />
+                  <path d="M5 8l2 2 4-4" stroke="#8972FD" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                Reservá turnos con un solo tap
+              </li>
+              <li style="display:flex;align-items:center;gap:9px;font-size:14px;color:#5A5A5A;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" fill="#EFEAFF" stroke="#8972FD" stroke-width="1.2" />
+                  <path d="M5 8l2 2 4-4" stroke="#8972FD" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                Activá alertas para emergencias del hogar
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- Profesional -->
+        <div class="card-hover"
+          style="background:#0F0F0F;border:1px solid #222;border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:18px;">
+          <div
+            style="width:52px;height:52px;background:#1a1a2e;border-radius:16px;display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                stroke="#8972FD" stroke-width="2" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-syne" style="font-size:20px;font-weight:800;color:white;margin-bottom:9px;">Profesional
+              independiente</h3>
+            <p style="font-size:15px;color:#B5B5B5;line-height:1.75;margin-bottom:18px;">Expandí tu cartera de clientes
+              sin invertir en publicidad ni depender de recomendaciones. Tu perfil visible para toda la comunidad local,
+              siempre activo.</p>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+              <li style="display:flex;align-items:center;gap:9px;font-size:14px;color:#D9DBE9;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" fill="#1a1a2e" stroke="#8972FD" stroke-width="1.2" />
+                  <path d="M5 8l2 2 4-4" stroke="#8972FD" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                Perfil gratuito en el mapa interactivo
+              </li>
+              <li style="display:flex;align-items:center;gap:9px;font-size:14px;color:#D9DBE9;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" fill="#1a1a2e" stroke="#8972FD" stroke-width="1.2" />
+                  <path d="M5 8l2 2 4-4" stroke="#8972FD" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                Clientes activos en tu zona de cobertura
+              </li>
+              <li style="display:flex;align-items:center;gap:9px;font-size:14px;color:#D9DBE9;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" fill="#1a1a2e" stroke="#8972FD" stroke-width="1.2" />
+                  <path d="M5 8l2 2 4-4" stroke="#8972FD" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                Notificaciones de trabajo urgente
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- Empresa -->
+        <div class="card-hover"
+          style="background:#F7F7FB;border:1px solid #E4E5F1;border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:18px;">
+          <div
+            style="width:52px;height:52px;background:#E7F9F1;border-radius:16px;display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M3 21h18M3 7v1a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4V7M3 7V4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"
+                stroke="#2EB67D" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-syne" style="font-size:20px;font-weight:800;color:#0F0F0F;margin-bottom:9px;">Empresa /
+              Comercio local</h3>
+            <p style="font-size:15px;color:#5A5A5A;line-height:1.75;margin-bottom:18px;">¿Comercializás materiales,
+              herramientas o insumos del rubro? Ganá visibilidad en el ecosistema local y conectate directamente con
+              profesionales y vecinos que te necesitan.</p>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+              <li style="display:flex;align-items:center;gap:9px;font-size:14px;color:#5A5A5A;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" fill="#E7F9F1" stroke="#2EB67D" stroke-width="1.2" />
+                  <path d="M5 8l2 2 4-4" stroke="#2EB67D" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                Catálogo de productos en la plataforma
+              </li>
+              <li style="display:flex;align-items:center;gap:9px;font-size:14px;color:#5A5A5A;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" fill="#E7F9F1" stroke="#2EB67D" stroke-width="1.2" />
+                  <path d="M5 8l2 2 4-4" stroke="#2EB67D" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                Visibilidad geolocalizada para tu comercio
+              </li>
+              <li style="display:flex;align-items:center;gap:9px;font-size:14px;color:#5A5A5A;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" fill="#E7F9F1" stroke="#2EB67D" stroke-width="1.2" />
+                  <path d="M5 8l2 2 4-4" stroke="#2EB67D" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                Canal de mensajería directa con compradores
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+     SURVEY — 3 STEPS
+══════════════════════════════════ -->
+  <section id="survey" style="padding:88px 24px;background:#F7F7FB;border-top:1px solid #E4E5F1;">
+    <div style="max-width:660px;margin:0 auto;">
+
+      <!-- Header -->
+      <div style="text-align:center;margin-bottom:44px;">
+        <div class="section-tag" style="margin-bottom:10px;">Validación de producto</div>
+        <h2 class="font-syne"
+          style="font-size:36px;font-weight:800;color:#0F0F0F;margin-bottom:12px;letter-spacing:-.02em;">¿Utilizarías
+          <em style="font-style:normal;color:#8972FD;">A la Vuelta</em>?</h2>
+        <p style="font-size:16px;color:#5A5A5A;line-height:1.75;max-width:460px;margin:0 auto;">Tres preguntas rápidas.
+          Sin publicidad ni spam. Tu respuesta nos ayuda a priorizar el desarrollo correcto.</p>
+      </div>
+
+      <!-- Survey card -->
+      <div
+        style="background:white;border:1px solid #E4E5F1;border-radius:24px;padding:36px 40px;box-shadow:0 4px 24px rgba(15,15,15,.05);">
+
+        <!-- Step indicator -->
+        <div class="step-indicator" id="stepIndicator">
+          <div class="step-node">
+            <div class="step-circle active" id="sc1">1</div>
+            <span class="step-label active" id="sl1">Interés</span>
+          </div>
+          <div class="step-connector" id="conn1"></div>
+          <div class="step-node">
+            <div class="step-circle inactive" id="sc2">2</div>
+            <span class="step-label inactive" id="sl2">Perfil</span>
+          </div>
+          <div class="step-connector" id="conn2"></div>
+          <div class="step-node">
+            <div class="step-circle inactive" id="sc3">3</div>
+            <span class="step-label inactive" id="sl3">Detalles</span>
+          </div>
+        </div>
+
+        <!-- ── STEP 1: Likelihood ── -->
+        <div class="survey-step active" id="survey-step-1">
+          <p class="font-syne" style="font-size:17px;font-weight:700;color:#0F0F0F;margin-bottom:8px;">¿Con qué
+            frecuencia utilizarías esta plataforma?</p>
+          <p style="font-size:14px;color:#8F8F8F;margin-bottom:20px;line-height:1.6;">Seleccioná la opción que mejor
+            describe tu intención de uso una vez que la plataforma esté disponible.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">
+            <div class="survey-option" onclick="selectOption(this,'likelihood','definite')">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div class="option-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg></div>
+                <div>
+                  <div style="font-weight:600;font-size:15px;color:#0F0F0F;font-family:'Syne',sans-serif;">La usaría
+                    desde el día del lanzamiento</div>
+                  <div style="font-size:13px;color:#8F8F8F;margin-top:2px;">Adopción inmediata — me resuelve una
+                    necesidad concreta</div>
+                </div>
+              </div>
+            </div>
+            <div class="survey-option" onclick="selectOption(this,'likelihood','likely')">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div class="option-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg></div>
+                <div>
+                  <div style="font-weight:600;font-size:15px;color:#0F0F0F;font-family:'Syne',sans-serif;">Probablemente
+                    sí la incorporaría</div>
+                  <div style="font-size:13px;color:#8F8F8F;margin-top:2px;">Alta probabilidad de uso — la situación lo
+                    amerita</div>
+                </div>
+              </div>
+            </div>
+            <div class="survey-option" onclick="selectOption(this,'likelihood','maybe')">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div class="option-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg></div>
+                <div>
+                  <div style="font-weight:600;font-size:15px;color:#0F0F0F;font-family:'Syne',sans-serif;">Tal vez,
+                    depende de cómo evolucione</div>
+                  <div style="font-size:13px;color:#8F8F8F;margin-top:2px;">Interés condicional — quiero ver más antes
+                    de decidir</div>
+                </div>
+              </div>
+            </div>
+            <div class="survey-option" onclick="selectOption(this,'likelihood','no')">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div class="option-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg></div>
+                <div>
+                  <div style="font-weight:600;font-size:15px;color:#0F0F0F;font-family:'Syne',sans-serif;">Probablemente
+                    no la utilizaría</div>
+                  <div style="font-size:13px;color:#8F8F8F;margin-top:2px;">Por el momento, no se ajusta a mi contexto
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn-primary" onclick="goToStep(2)"
+            style="width:100%;justify-content:center;font-size:15px;padding:15px;">
+            Continuar
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- ── STEP 2: Role ── -->
+        <div class="survey-step" id="survey-step-2">
+          <p class="font-syne" style="font-size:17px;font-weight:700;color:#0F0F0F;margin-bottom:8px;">¿Cómo te ves
+            participando en la plataforma?</p>
+          <p style="font-size:14px;color:#8F8F8F;margin-bottom:20px;line-height:1.6;">Seleccioná el rol que mejor
+            describe tu relación con los servicios del hogar o del rubro.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">
+            <div class="survey-option" onclick="selectOption(this,'role','user')">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div class="option-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg></div>
+                <div>
+                  <div style="font-weight:600;font-size:15px;color:#0F0F0F;font-family:'Syne',sans-serif;">Como usuario
+                    — necesito contratar servicios</div>
+                  <div style="font-size:13px;color:#8F8F8F;margin-top:2px;">Vecino o propietario que busca profesionales
+                    de confianza</div>
+                </div>
+              </div>
+            </div>
+            <div class="survey-option" onclick="selectOption(this,'role','pro')">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div class="option-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg></div>
+                <div>
+                  <div style="font-weight:600;font-size:15px;color:#0F0F0F;font-family:'Syne',sans-serif;">Como
+                    profesional — quiero conseguir más clientes</div>
+                  <div style="font-size:13px;color:#8F8F8F;margin-top:2px;">Plomero, electricista, carpintero u otro
+                    oficio independiente</div>
+                </div>
+              </div>
+            </div>
+            <div class="survey-option" onclick="selectOption(this,'role','both')">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div class="option-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg></div>
+                <div>
+                  <div style="font-weight:600;font-size:15px;color:#0F0F0F;font-family:'Syne',sans-serif;">Ambos roles —
+                    busco y ofrezco servicios</div>
+                  <div style="font-size:13px;color:#8F8F8F;margin-top:2px;">Perfil mixto: según la situación actúo de un
+                    lado u otro</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button class="btn-secondary" onclick="goToStep(1)" style="padding:14px 20px;font-size:14px;">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M10 7H4M6 4L3 7l3 3" stroke="#0F0F0F" stroke-width="1.8" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+              Atrás
+            </button>
+            <button class="btn-primary" onclick="goToStep(3)"
+              style="flex:1;justify-content:center;font-size:15px;padding:14px;">
+              Continuar
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- ── STEP 3: Details (conditional) ── -->
+        <div class="survey-step" id="survey-step-3">
+
+          <!-- Payment question — only for 'pro' -->
+          <div id="payment-question" style="display:none;margin-bottom:28px;">
+            <p class="font-syne" style="font-size:17px;font-weight:700;color:#0F0F0F;margin-bottom:8px;">¿Estarías
+              dispuesto a abonar una suscripción mensual?</p>
+            <p style="font-size:14px;color:#8F8F8F;margin-bottom:18px;line-height:1.6;">La plataforma contaría con un
+              plan básico gratuito y un plan profesional pago con beneficios de visibilidad, estadísticas y prioridad en
+              alertas de urgencia.</p>
+            <div style="display:flex;gap:12px;margin-bottom:0;">
+              <div class="pay-option" id="pay-yes" onclick="selectPayment(true)">
+                <div style="font-size:22px;margin-bottom:6px;">✅</div>
+                Sí, lo consideraría
+              </div>
+              <div class="pay-option" id="pay-no" onclick="selectPayment(false)">
+                <div style="font-size:22px;margin-bottom:6px;">❌</div>
+                No pagaría por ello
+              </div>
+            </div>
+            <div style="height:1px;background:#E4E5F1;margin:24px 0;"></div>
+          </div>
+
+          <!-- Contact fields -->
+          <p class="font-syne" style="font-size:17px;font-weight:700;color:#0F0F0F;margin-bottom:8px;">¿Querés ser de
+            los primeros en conocer el lanzamiento?</p>
+          <p style="font-size:14px;color:#8F8F8F;margin-bottom:20px;line-height:1.6;">Dejanos tu contacto y serás el
+            primero en recibir acceso anticipado. No enviamos publicidad ni cedemos tus datos a terceros.</p>
+          <div class="field-group" style="margin-bottom:24px;">
+            <div>
+              <div class="field-label">Nombre <span style="font-weight:400;color:#B5B5B5;">(opcional)</span></div>
+              <input type="text" id="name" placeholder="Ej: Martina García" />
+            </div>
+            <div>
+              <div class="field-label">Correo electrónico <span style="font-weight:400;color:#B5B5B5;">(opcional)</span>
+              </div>
+              <input type="email" id="email" placeholder="tu@correo.com" />
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;">
+            <button class="btn-secondary" onclick="goToStep(2)" style="padding:14px 20px;font-size:14px;">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M10 7H4M6 4L3 7l3 3" stroke="#0F0F0F" stroke-width="1.8" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+              Atrás
+            </button>
+            <button class="btn-primary" id="submit-btn" onclick="submitSurvey()"
+              style="flex:1;justify-content:center;font-size:15px;padding:14px;">
+              Enviar respuesta
+              <svg id="submit-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+          <p style="font-size:12px;color:#8F8F8F;text-align:center;margin-top:12px;line-height:1.6;">El correo es
+            opcional. Únicamente lo utilizamos para avisarte del lanzamiento.</p>
+        </div>
+
+        <!-- ── SUCCESS ── -->
+        <div class="survey-step" id="survey-success" style="text-align:center;padding:16px 0;">
+          <div
+            style="width:72px;height:72px;background:#EFEAFF;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+              <path d="M20 6L9 17l-5-5" stroke="#8972FD" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3 class="font-syne" style="font-size:26px;font-weight:800;color:#0F0F0F;margin-bottom:12px;">¡Muchas gracias
+            por tu tiempo!</h3>
+          <p style="font-size:15px;color:#5A5A5A;line-height:1.75;max-width:400px;margin:0 auto 24px;">Tu respuesta es
+            fundamental para validar esta idea y construir una plataforma que realmente resuelva un problema real en tu
+            comunidad. Te notificaremos ante cualquier novedad.</p>
+          <div
+            style="background:#F7F7FB;border:1.5px solid #E4E5F1;border-radius:16px;padding:18px 22px;max-width:360px;margin:0 auto 20px;">
+            <p style="font-size:13px;color:#8F8F8F;margin-bottom:4px;">¿Tenés sugerencias o querés sumarte al equipo?
+            </p>
+            <p style="font-size:15px;font-weight:700;color:#8972FD;font-family:'Syne',sans-serif;">hola@alavuelta.app
+            </p>
+          </div>
+        </div>
+
+      </div><!-- /survey card -->
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+     FOOTER
+══════════════════════════════════ -->
+  <footer style="background:#0F0F0F;padding:44px 24px;">
+    <div
+      style="max-width:1100px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <img src="imagenes/logo1024.png" alt="A la Vuelta"
+          style="width:32px;height:32px;border-radius:7px;object-fit:contain;" />
+        <span class="font-syne" style="font-weight:800;font-size:16px;color:white;letter-spacing:-.01em;">a la
+          vuelta</span>
+      </div>
+      <p style="font-size:13px;color:#5A5A5A;line-height:1.65;max-width:340px;">Construyendo la plataforma que conecta
+        barrios con sus profesionales de confianza.</p>
+      <p style="font-size:12px;color:#3A3A3A;">© 2026 A la Vuelta · Todos los derechos reservados</p>
+    </div>
+  </footer>
+
+
+  <!-- ══════════════════════════════════
+     SCRIPTS
+══════════════════════════════════ -->
+  <script>
+    /* ── Survey state ── */
+    const surveyState = {
+      currentStep: 1,
+      likelihood: null,
+      role: null,
+      willingToPay: null,
+      name: '',
+      email: ''
+    };
+
+    /* ── Option selection (generic) ── */
+    function selectOption(el, group, value) {
+      // Deselect siblings in the same step
+      el.closest('.survey-step').querySelectorAll('.survey-option').forEach(opt => {
+        if (opt.getAttribute('onclick') && opt.getAttribute('onclick').includes(`'${group}'`)) {
+          opt.classList.remove('selected');
+        }
+      });
+      el.classList.add('selected');
+      surveyState[group] = value;
+    }
+
+    /* ── Payment selection ── */
+    function selectPayment(value) {
+      surveyState.willingToPay = value;
+      document.getElementById('pay-yes').className = 'pay-option' + (value === true ? ' selected-yes' : '');
+      document.getElementById('pay-no').className = 'pay-option' + (value === false ? ' selected-no' : '');
+    }
+
+    /* ── Step navigation ── */
+    function goToStep(targetStep) {
+      // Validate current step before advancing
+      if (targetStep > surveyState.currentStep) {
+        if (surveyState.currentStep === 1 && !surveyState.likelihood) {
+          shakeCard(); return;
+        }
+        if (surveyState.currentStep === 2 && !surveyState.role) {
+          shakeCard(); return;
+        }
+      }
+
+      // If moving TO step 3, configure the conditional payment question
+      if (targetStep === 3) {
+        const payQ = document.getElementById('payment-question');
+        payQ.style.display = surveyState.role === 'pro' ? 'block' : 'none';
+        // Reset payment selection if role changed
+        if (surveyState.role !== 'pro') surveyState.willingToPay = null;
+      }
+
+      // Hide current, show target
+      document.getElementById(`survey-step-${surveyState.currentStep}`)?.classList.remove('active');
+      const target = document.getElementById(`survey-step-${targetStep}`) ||
+        document.getElementById(`survey-success`);
+      if (target) target.classList.add('active');
+
+      surveyState.currentStep = targetStep;
+      updateStepIndicator(targetStep);
+    }
+
+    /* ── Step indicator update ── */
+    function updateStepIndicator(step) {
+      [1, 2, 3].forEach(n => {
+        const circle = document.getElementById(`sc${n}`);
+        const label = document.getElementById(`sl${n}`);
+        circle.className = 'step-circle ' + (n < step ? 'done' : n === step ? 'active' : 'inactive');
+        label.className = 'step-label ' + (n < step ? 'done' : n === step ? 'active' : 'inactive');
+        circle.innerHTML = n < step
+          ? '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-5.5" stroke="#6E57D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+          : n;
+      });
+      document.getElementById('conn1').className = 'step-connector' + (step > 1 ? ' done' : '');
+      document.getElementById('conn2').className = 'step-connector' + (step > 2 ? ' done' : '');
+
+      // Hide stepper on success
+      document.getElementById('stepIndicator').style.display =
+        document.getElementById('survey-success').classList.contains('active') ? 'none' : 'flex';
+    }
+
+    /* ── Shake animation for validation ── */
+    function shakeCard() {
+      const card = document.querySelector('#survey .survey-step.active');
+      card.style.animation = 'none';
+      card.offsetHeight; // reflow
+      card.style.animation = 'shakeCard .4s ease';
+    }
+    const shakeStyle = document.createElement('style');
+    shakeStyle.textContent = '@keyframes shakeCard{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}';
+    document.head.appendChild(shakeStyle);
+
+    /* ── UUID generator ── */
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+        const r = Math.random() * 16 | 0;
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+    }
+
+    /* ── Submit ── */
+    async function submitSurvey() {
+      if (surveyState.role === 'pro' && surveyState.willingToPay === null) {
+        shakeCard(); return;
+      }
+
+      const btn = document.getElementById('submit-btn');
+      const arrow = document.getElementById('submit-arrow');
+      btn.disabled = true;
+      arrow.style.display = 'none';
+      btn.innerHTML = '<div class="spinner"></div> Enviando respuesta…';
+
+      const payload = {
+        name: document.getElementById('name').value.trim() || null,
+        email: document.getElementById('email').value.trim() || null,
+        likelihood: surveyState.likelihood,
+        role: surveyState.role,
+        willing_to_pay: surveyState.role === 'pro' ? surveyState.willingToPay : null,
+        source: 'landing_page'
+      };
+
+      console.log('[A la Vuelta] Survey submission payload:');
+      console.log(JSON.stringify(payload, null, 2));
+
+      try {
+        const BASE_URL = window.ENV?.FIXEO_PROD ?? '';
+
+        const res = await fetch(`${BASE_URL}/api/survey/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          console.error('[A la Vuelta] Error del servidor:', err);
+          btn.disabled = false;
+          arrow.style.display = '';
+          btn.innerHTML = 'Reintentar';
+          return;
+        }
+
+        const data = await res.json();
+        console.log('[A la Vuelta] Guardado con id:', data.id);
+
+      } catch (err) {
+        console.error('[A la Vuelta] Error de red:', err);
+        btn.disabled = false;
+        arrow.style.display = '';
+        btn.innerHTML = 'Reintentar';
+        return;
+      }
+
+      // Show success
+      document.getElementById('survey-step-3').classList.remove('active');
+      document.getElementById('survey-success').classList.add('active');
+      document.getElementById('stepIndicator').style.display = 'none';
+    }
+    /* ── Tab switcher (how it works) ── */
+    function showTab(tab) {
+      const uC = document.getElementById('tab-user-content');
+      const pC = document.getElementById('tab-pro-content');
+      const tU = document.getElementById('tab-user');
+      const tP = document.getElementById('tab-pro');
+
+      if (tab === 'user') {
+        uC.style.display = 'block'; pC.style.display = 'none';
+        tU.className = 'btn-primary'; tU.style.cssText = 'padding:10px 24px;font-size:14px;';
+        tP.className = 'btn-secondary'; tP.style.cssText = 'padding:10px 24px;font-size:14px;';
+      } else {
+        uC.style.display = 'none'; pC.style.display = 'block';
+        tP.className = 'btn-primary'; tP.style.cssText = 'padding:10px 24px;font-size:14px;';
+        tU.className = 'btn-secondary'; tU.style.cssText = 'padding:10px 24px;font-size:14px;';
+      }
+    }
+
+    /* ── Carousel ── */
+    const vp = document.getElementById('carouselViewport');
+    const slides = vp.querySelectorAll('.carousel-slide');
+    const totalSl = slides.length;
+    let currIdx = Math.floor(totalSl / 2);
+    const dotsCont = document.getElementById('carouselDots');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    for (let i = 0; i < totalSl; i++) {
+      const d = document.createElement('button');
+      d.className = 'carousel-dot' + (i === currIdx ? ' active' : '');
+      d.setAttribute('aria-label', `Ir a slide ${i + 1}`);
+      d.addEventListener('click', () => goSlide(i));
+      dotsCont.appendChild(d);
+    }
+
+    function updateCarousel() {
+      slides.forEach((s, i) => {
+        const diff = i - currIdx;
+        s.className = 'carousel-slide';
+        if (diff === 0) s.classList.add('pos-center');
+        else if (diff === -1) s.classList.add('pos-left');
+        else if (diff === 1) s.classList.add('pos-right');
+        else s.classList.add('pos-hidden');
+      });
+      dotsCont.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === currIdx));
+      prevBtn.style.display = currIdx === 0 ? 'none' : 'flex';
+      nextBtn.style.display = currIdx === totalSl - 1 ? 'none' : 'flex';
+    }
+    function moveCarousel(dir) { currIdx = Math.max(0, Math.min(totalSl - 1, currIdx + dir)); updateCarousel(); }
+    function goSlide(i) { currIdx = i; updateCarousel(); }
+    updateCarousel();
+
+    /* ── Scroll reveal ── */
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+  </script>
+
+  <!--
+════════════════════════════════════════════════════════════════
+  DATABASE ENTITY — survey_responses
+  Compatible con: PostgreSQL / Supabase / PlanetScale / MySQL 8
+════════════════════════════════════════════════════════════════
+
+CREATE TABLE survey_responses (
+  id              UUID            PRIMARY KEY DEFAULT gen_random_uuid(),
+  name            VARCHAR(120),
+  email           VARCHAR(255),
+  likelihood      VARCHAR(20)     NOT NULL CHECK (likelihood IN ('definite','likely','maybe','no')),
+  role            VARCHAR(20)     NOT NULL CHECK (role IN ('user','pro','both')),
+  willing_to_pay  BOOLEAN,                          -- NULL si role != 'pro'
+  submitted_at    TIMESTAMPTZ     NOT NULL DEFAULT NOW(),
+  source          VARCHAR(60)     NOT NULL DEFAULT 'landing_page',
+  ip_address      VARCHAR(45),                      -- IPv4 o IPv6
+  user_agent      TEXT
+);
+
+-- Índices recomendados
+CREATE INDEX idx_sr_email        ON survey_responses (email)        WHERE email IS NOT NULL;
+CREATE INDEX idx_sr_role         ON survey_responses (role);
+CREATE INDEX idx_sr_likelihood   ON survey_responses (likelihood);
+CREATE INDEX idx_sr_submitted_at ON survey_responses (submitted_at DESC);
+
+-- Descripción de campos:
+-- id              → UUID autogenerado por la base de datos
+-- name            → Nombre del participante (opcional)
+-- email           → Correo electrónico para contacto (opcional)
+-- likelihood      → Intención de uso: definite | likely | maybe | no
+-- role            → Perfil declarado: user | pro | both
+-- willing_to_pay  → Solo aplica cuando role = 'pro'. NULL en los demás casos
+-- submitted_at    → Timestamp UTC de cuando se envió el formulario
+-- source          → Origen del envío (para multi-fuente en el futuro)
+-- ip_address      → IP del usuario (registrar desde el servidor, nunca client-side)
+-- user_agent      → User-Agent del navegador (registrar desde el servidor)
+
+-- TypeScript / Prisma schema equivalente:
+--
+-- model SurveyResponse {
+--   id            String    @id @default(uuid())
+--   name          String?
+--   email         String?
+--   likelihood    String
+--   role          String
+--   willingToPay  Boolean?  @map("willing_to_pay")
+--   submittedAt   DateTime  @default(now()) @map("submitted_at")
+--   source        String    @default("landing_page")
+--   ipAddress     String?   @map("ip_address")
+--   userAgent     String?   @map("user_agent")
+--   @@map("survey_responses")
+-- }
+════════════════════════════════════════════════════════════════
+-->
+</body>
+
+</html>
