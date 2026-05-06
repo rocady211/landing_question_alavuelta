@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>A la Vuelta — Profesionales de confianza, en tu barrio</title>
+  <link rel="icon" type="image/png" href="imagenes/logo1024.png">
   <style>
     *,
     *::before,
@@ -1670,7 +1671,7 @@
       console.log(JSON.stringify(payload, null, 2));
 
       try {
-        const BASE_URL = window.ENV?.FIXEO_PROD ?? '';
+        const BASE_URL = "https://fixeobe-production.up.railway.app";
 
         const res = await fetch(`${BASE_URL}/api/survey/`, {
           method: 'POST',
