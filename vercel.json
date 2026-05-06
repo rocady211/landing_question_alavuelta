@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/survey/(.*)",
+      "destination": "https://fixeobe-production.up.railway.app/api/survey/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
